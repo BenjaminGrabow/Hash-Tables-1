@@ -9,13 +9,12 @@ class LinkedPair:
 
 class HashTable:
     '''
-    A hash table that with `capacity` buckets
+    A hash table that with `capacity` index_of_keys
     that accepts string keys
     '''
     def __init__(self, capacity):
-        self.capacity = capacity  # Number of buckets in the hash table
+        self.capacity = capacity  # Number of index_of_keys in the hash table
         self.storage = [None] * capacity
-
 
     def _hash(self, key):
         '''
@@ -51,9 +50,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
-
+        index_of_key = self._hash_mod(key)
+        node = LinkedPair(key,value)
+        node.next = self.storage[index_of_key]
+        self.storage[index_of_key] = node
 
     def remove(self, key):
         '''
@@ -63,7 +63,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index_of_key = self._hash_mod(key)
+
+        if self.storage[index_of_key] is None:
+            print("Key not found!")
+            return
+
+        item_to_remove = self.storage[index_of_key]
+        self.storage[index_of_key] = item_to_remove.next
+        return
 
 
     def retrieve(self, key):
@@ -74,8 +82,16 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index_of_key = self._hash_mod(key)
+        
+        current_item = self.storage[index_of_key]
+      
+        while current_item:
+            if current_item.key == key:
+                return current_item.value
+            current_item = current_item.next
 
+        return None
 
     def resize(self):
         '''
@@ -84,7 +100,8 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        for i in range(self.capacity):
+            self.storage.append(None)
 
 
 
